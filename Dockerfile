@@ -7,10 +7,42 @@ RUN apt-get update && apt-get install -qy \
   ca-certificates \
   curl \
   gcc \
+  automake \
+  build-essential \
+  cmake \ 
+  g++-4.8 \
+  make \ 
   git \
   libgmp-dev \
   software-properties-common \
   libc6-dev
+
+
+# sigh
+RUN apt-get install -qy \
+  automake \
+  build-essential \
+  cmake \
+  g++-4.8 \
+  libargtable2-dev \
+  libboost-all-dev \
+  libcurl4-openssl-dev \
+  libgmp-dev \
+  libjsoncpp-dev \
+  libleveldb-dev \
+  libminiupnpc-dev \
+  libncurses5-dev \
+  libreadline-dev \
+  libtool \
+  make \
+  scons \
+  software-properties-common \
+  wget \
+  yasm \
+  unzip
+
+
+
 ENV GOLANG_VERSION 1.4.2
 RUN curl -sSL https://golang.org/dl/go$GOLANG_VERSION.src.tar.gz \
   | tar -v -C /usr/src -xz
@@ -29,6 +61,12 @@ RUN add-apt-repository -y ppa:ethereum/ethereum && \
   sc=$(apt-cache policy sc | grep ethereum-dev -B 1 | awk 'NR==1 {print $1}') \
   solc \
   && rm -rf /var/lib/apt/lists/*
+
+# eris lll compiler for backwards compatibility
+RUN git clone https://github.com/eris-ltd/eris-cpp && \
+  cd eris-cpp && cd build && \
+  cmake .. -DCMAKE_BUILD_TYPE=Release -DLANGUAGES=1 && make && \
+  mv ./lllc/lllc /usr/bin/lllc
 
 # LLLC-server, a go app that manages compilations
 ENV repository lllc-server
