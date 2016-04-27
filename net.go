@@ -130,8 +130,8 @@ func requestResponse(req *Request) (*Response, error) {
 	if resp.StatusCode > 300 {
 		return nil, fmt.Errorf("HTTP error: %d", resp.StatusCode)
 	}
-	log.Info("Hitting new reponse")
 	respJ := new(Response)
+	log.Info("Hitting new reponse")
 	// read in response body
 	body, err := ioutil.ReadAll(resp.Body)
 	err = json.Unmarshal(body, respJ)
