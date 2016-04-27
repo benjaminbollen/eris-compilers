@@ -140,6 +140,7 @@ func requestResponse(req *Request) (*Response, error) {
 		log.Errorln("failed to unmarshal", err)
 		return nil, err
 	}
+	log.Info("Problem unmarshalling?")
 	return respJ, nil
 }
 
