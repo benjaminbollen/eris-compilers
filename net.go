@@ -111,13 +111,14 @@ func requestResponse(req *Request) (*Response, error) {
 		log.Errorln("failed to marshal req obj", err)
 		return nil, err
 	}
+	log.Info("Hitting New Request")
 	httpreq, err := http.NewRequest("POST", URL, bytes.NewBuffer(reqJ))
 	if err != nil {
 		log.Errorln("failed to compose request:", err)
 		return nil, err
 	}
 	httpreq.Header.Set("Content-Type", "application/json")
-
+	log.Info("Hitting Client")
 	client := &http.Client{}
 	resp, err := client.Do(httpreq)
 	if err != nil {
@@ -129,7 +130,7 @@ func requestResponse(req *Request) (*Response, error) {
 	if resp.StatusCode > 300 {
 		return nil, fmt.Errorf("HTTP error: %d", resp.StatusCode)
 	}
-
+	log.Info("Hitting new reponse")
 	respJ := new(Response)
 	// read in response body
 	body, err := ioutil.ReadAll(resp.Body)
