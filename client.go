@@ -24,6 +24,7 @@ func resolveCode(filename string, literal bool) (code []byte, err error) {
 
 // send compile request to server or compile directly
 func (c *CompileClient) compileRequest(req *Request) (resp *Response, err error) {
+	log.Info("Made it to compile request")
 	if c.config.Net {
 		log.WithField("url", c.config.URL).Debug("Compiling code remotely")
 		resp, err = requestResponse(req)
