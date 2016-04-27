@@ -123,7 +123,7 @@ var Languages = map[string]LangConfig{
 			{`import "`, `.sol";`},
 		},
 		CompileCmd: []string{
-			"/usr/bin/solc",
+			"solc",
 			"--combined-json", "bin,abi",
 			"_",
 		},

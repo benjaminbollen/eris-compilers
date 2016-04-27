@@ -61,7 +61,7 @@
 		"regexes": [],
 		"replaces": [],
 		"cmd": [
-			"/usr/bin/solc",
+			"solc",
 			"_",
 			"--binary",
 			"stdout",
@@ -76,7 +76,7 @@
 			"{print $1; exit}"
 		],
 		"abi": [
-			"/usr/bin/solc",
+			"solc",
 			"_",
 			"--json-abi",
 			"stdout",

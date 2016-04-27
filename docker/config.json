@@ -68,7 +68,7 @@
 			]
 		],
 		"cmd": [
-			"/usr/bin/solc",
+			"solc",
 			"--bin",
 			"_",
 			"imports",
@@ -82,7 +82,7 @@
 			"1"
 		],
 		"abi": [
-			"/usr/bin/solc",
+			"solc",
 			"--abi",
 			"_",
 			"imports",

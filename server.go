@@ -252,7 +252,7 @@ func CompileWrapper(filename string, lang string, includes []string, libraries s
 	// attempt to decode as a solc json return structure // TODO proper logging
 	solcResp := BlankSolcResponse()
 
-	// log.Warn("Compiler Result\t\t\t\t=> %s\n", hexCode)
+	log.Warn("Compiler Result\t\t\t\t=> %s\n", hexCode)
 	err = json.Unmarshal([]byte(hexCode), solcResp)
 
 	if err == nil {
