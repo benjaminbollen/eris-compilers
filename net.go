@@ -107,6 +107,7 @@ func requestResponse(req *Request) (*Response, error) {
 	// log.Debugf("Lang & URL for request =>\t%s:%s\n", URL, lang)
 	// make request
 	reqJ, err := json.Marshal(req)
+	log.Info("ReqJ: ", reqJ)
 	if err != nil {
 		log.Errorln("failed to marshal req obj", err)
 		return nil, err
