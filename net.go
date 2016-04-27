@@ -134,6 +134,7 @@ func requestResponse(req *Request) (*Response, error) {
 	log.Info("Hitting new reponse")
 	// read in response body
 	body, err := ioutil.ReadAll(resp.Body)
+	log.Info("Problem reading body?")
 	err = json.Unmarshal(body, respJ)
 	if err != nil {
 		log.Errorln("failed to unmarshal", err)
