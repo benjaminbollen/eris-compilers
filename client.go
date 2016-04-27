@@ -66,6 +66,7 @@ func (c *CompileClient) Compile(dir string, code []byte, libraries string) (*Res
 	resp, err := c.compileRequest(req)
 
 	if err != nil {
+		log.Info("Error in compile request")
 		return nil, err
 	}
 
