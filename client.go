@@ -70,7 +70,7 @@ func (c *CompileClient) Compile(dir string, code []byte, libraries string) (*Res
 		log.Info("Error in compile request")
 		return nil, err
 	}
-
+	log.Info("RESPONSE ERROR: ", resp.Error)
 	if resp.Error == "" {
 		for _, r := range resp.Objects {
 			// fill in cached values, cache new values
