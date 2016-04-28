@@ -171,6 +171,7 @@ func checkConfig(f string) error {
 func SetLanguageURL(lang, url string) error {
 	l, ok := Languages[lang]
 	if !ok {
+		log.Info("Set languages url")
 		return UnknownLang(lang)
 	}
 	l.URL = url
@@ -182,6 +183,7 @@ func SetLanguageURL(lang, url string) error {
 func SetLanguageNet(lang string, net bool) error {
 	l, ok := Languages[lang]
 	if !ok {
+		log.Info("Set Language Net")
 		return UnknownLang(lang)
 	}
 	l.Net = net
@@ -226,6 +228,7 @@ func UnknownLang(lang string) error {
 func NewCompileClient(lang string) (*CompileClient, error) {
 	l, ok := Languages[lang]
 	if !ok {
+		log.Info("New Compile Client")
 		return nil, UnknownLang(lang)
 	}
 	cc := &CompileClient{

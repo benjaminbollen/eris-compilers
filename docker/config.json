@@ -16,7 +16,7 @@
 			]
 		],
 		"cmd": [
-			"/usr/bin/lllc",
+			"lllc",
 			"_"
 		],
 		"abi": null
@@ -53,7 +53,7 @@
 		]
 	},
 	"sol": {
-		"url": "https://compilers.eris.industries:9090/compile",
+		"url": "http://localhost:9097",
 		"net": true,
 		"extensions": [
 			"sol"

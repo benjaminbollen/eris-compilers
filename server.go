@@ -45,6 +45,7 @@ var ServerCache = path.Join(common.LllcScratchPath, "server")
 // Handler for proxy requests (ie. a compile request from langauge other than go)
 func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 	// read the request body
+	log.Info(r.Body)
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Errorln("err on read http request body", err)
@@ -63,9 +64,12 @@ func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 
 	var resp *Response
 	if req.Literal {
+		log.Info("Compile literal")
 		resp = CompileLiteral(req.Source, req.Language)
 	} else {
+		log.Info("Compile")
 		resp = Compile(req.Source, req.Libraries)
+		log.Info(resp)
 	}
 
 	respJ, err := json.Marshal(resp)
@@ -128,9 +132,9 @@ func compileResponse(w http.ResponseWriter, r *http.Request) *Response {
 	log.WithFields(log.Fields{
 		"name": req.ScriptName,
 		"lang": req.Language,
-		// "script": string(req.Script),
-		// "libs":   req.Libraries,
-		// "incl":   req.Includes,
+		"script": string(req.Script),
+		"libs":   req.Libraries,
+		"incl":   req.Includes,
 	}).Debug("New Request")
 	resp := compileServerCore(req)
 
@@ -227,6 +231,7 @@ func CompileWrapper(filename string, lang string, includes []string, libraries s
 	filename = path.Base(filename)
 
 	if _, ok := Languages[lang]; !ok {
+		log.Info("Compile wrapper")
 		return NewResponse(filename, nil, "", UnknownLang(lang))
 	}
 

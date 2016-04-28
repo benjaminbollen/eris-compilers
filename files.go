@@ -187,17 +187,21 @@ func cacheResult(objectName string, compiled []byte, docs string) {
 // Get language from filename extension
 func LangFromFile(filename string) (string, error) {
 	ext := path.Ext(filename)
+	log.Info(ext)
 	ext = strings.Trim(ext, ".")
+	log.Info(ext)
 	if _, ok := Languages[ext]; ok {
 		return ext, nil
 	}
 	for l, lc := range Languages {
 		for _, e := range lc.Extensions {
+			log.Info("loop, ", e)
 			if ext == e {
 				return l, nil
 			}
 		}
 	}
+	log.Info("Lang from file")
 	return "", UnknownLang(ext)
 }
 

@@ -61,6 +61,12 @@ func (c *CompileClient) Compile(dir string, code []byte, libraries string) (*Res
 		// TODO: need to return all contracts/libs tied to the original src file
 		return c.cachedResponse(hash)
 	}
+	log.WithFields(log.Fields{
+		"code: ": code, 
+		"includes: ": includes,
+		"lang: ": c.Lang(),
+		"libraries: ": libraries,
+	}).Info("Stuff")
 	req := NewRequest(code, includes, c.Lang(), libraries)
 
 	// response struct (returned)
@@ -104,6 +110,7 @@ func compile(filename string, code []byte, lang, dir string, libraries string) *
 
 // Compile a file and resolve includes
 func Compile(filename string, libraries string) *Response {
+	log.Info("filename, ", filename)
 	lang, err := LangFromFile(filename)
 	if err != nil {
 		return NewResponse("", nil, "", err)

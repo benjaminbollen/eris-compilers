@@ -100,7 +100,7 @@ func cliClient(c *cli.Context) {
 
 	host := c.String("host")
 	if host != "" {
-		url := host + "/" + "compile"
+		url := host //+ "/" + "compile"
 		compilers.SetLanguageURL(lang, url)
 	}
 	log.Debugln("language config:", compilers.Languages[lang])

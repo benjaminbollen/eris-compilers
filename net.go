@@ -60,6 +60,12 @@ func NewRequest(script []byte, includes map[string][]byte, lang string, libs str
 		Language:  lang,
 		Libraries: libs,
 	}
+	log.WithFields(log.Fields{
+		"code: ": script, 
+		"includes: ": includes,
+		"lang: ": lang,
+		"libraries: ": libs,
+	}).Info("Stuff")
 	return req
 }
 
