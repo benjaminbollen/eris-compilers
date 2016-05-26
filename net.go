@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	log "github.com/eris-ltd/eris-compilers/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 // Compile request object

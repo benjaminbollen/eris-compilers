@@ -8,7 +8,7 @@ import (
 	"path"
 	"testing"
 
-	"github.com/eris-ltd/eris-compilers/Godeps/_workspace/src/github.com/eris-ltd/common/go/common"
+	"github.com/eris-ltd/common/go/common"
 )
 
 func init() {

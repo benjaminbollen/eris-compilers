@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"path"
 
-	log "github.com/eris-ltd/eris-compilers/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/eris-ltd/eris-compilers/Godeps/_workspace/src/github.com/eris-ltd/common/go/common"
+	log "github.com/Sirupsen/logrus"
+	"github.com/eris-ltd/common/go/common"
 )
 
 // ClientCache location in eris tree

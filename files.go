@@ -10,7 +10,7 @@ import (
 	"regexp"
 	"strings"
 
-	log "github.com/eris-ltd/eris-compilers/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 // cache compiled regex expressions

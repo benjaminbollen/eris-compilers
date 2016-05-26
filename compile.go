@@ -7,8 +7,8 @@ import (
 	"os"
 	"path"
 
-	log "github.com/eris-ltd/eris-compilers/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/eris-ltd/eris-compilers/Godeps/_workspace/src/github.com/eris-ltd/common/go/common"
+	log "github.com/Sirupsen/logrus"
+	"github.com/eris-ltd/common/go/common"
 )
 
 var DefaultUrl = "https://compilers.eris.industries:9090/compile"

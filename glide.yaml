@@ -1,0 +1,11 @@
+package: github.com/eris-ltd/eris-compilers
+import:
+- package: github.com/Sirupsen/logrus
+- package: github.com/codegangsta/cli
+- package: github.com/ebuchman/go-shell-pipes
+- package: github.com/eris-ltd/common
+  subpackages:
+  - go/common
+  - go/log
+- package: github.com/go-martini/martini
+- package: github.com/martini-contrib/secure
