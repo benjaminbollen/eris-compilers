@@ -1,26 +1,89 @@
-FROM quay.io/eris/tools
+FROM quay.io/eris/base:alpine
 MAINTAINER Eris Industries <support@erisindustries.com>
 
-# Install Dependencies
-RUN apt-get update && apt-get install -qy \
-  --no-install-recommends \
-  ca-certificates \
-  && rm -rf /var/lib/apt/lists/*
+# Install Solc dependencies
+RUN apk --no-cache --update add --virtual dependencies \
+            libgcc \
+            libstdc++
+RUN apk --no-cache --update add --virtual build-dependencies \
+            bash \
+            cmake \
+            curl-dev \
+            git \
+            gcc \
+            g++ \
+            linux-headers \
+            make \
+            perl \
+            python \
+            scons\
+
+            boost-dev \
+            gmp-dev\
+            libmicrohttpd-dev
+
+RUN mkdir -p /src/deps
+
+WORKDIR /src/deps
+
+RUN git clone https://github.com/mmoss/cryptopp.git
+RUN git clone https://github.com/open-source-parsers/jsoncpp.git
+RUN git clone https://github.com/cinemast/libjson-rpc-cpp
+RUN git clone https://github.com/google/leveldb
+
+ENV PREFIX /src/built
+
+RUN mkdir -p ${PREFIX}/include ${PREFIX}/lib
+
+RUN cd cryptopp \
+ && cmake -DCRYPTOPP_LIBRARY_TYPE=STATIC \
+          -DCRYPTOPP_RUNTIME_TYPE=STATIC \
+          -DCRYPTOPP_BUILD_TESTS=FALSE \
+          -DCMAKE_INSTALL_PREFIX=${PREFIX}/ \
+          . \
+ && make cryptlib \
+ && cp -r src ${PREFIX}/include/cryptopp \
+ && cp src/libcryptlib.a ${PREFIX}/lib/
+
+
+## These aren't really necessary for solc, but can't build without them
+## as devcore links to them.
+RUN cd jsoncpp \
+ && cmake -DCMAKE_INSTALL_PREFIX=${PREFIX}/ . \
+ && make jsoncpp_lib_static \
+ && make install
+
+RUN mkdir -p libjson-rpc-cpp/build \
+ && sed -e 's/^#include <string>/#include <string.h>/' libjson-rpc-cpp/src/jsonrpccpp/server/connectors/unixdomainsocketserver.cpp -i \
+ && cd libjson-rpc-cpp/build \
+ && cmake -DJSONCPP_LIBRARY=../../jsoncpp/src/lib_json/libjsoncpp.a \
+          -DJSONCPP_INCLUDE_DIR=../../jsoncpp/include/ \
+          -DBUILD_STATIC_LIBS=YES                      \
+          -DBUILD_SHARED_LIBS=NO                       \
+          -DCOMPILE_TESTS=NO                           \
+          -DCOMPILE_EXAMPLES=NO                        \
+          -DCOMPILE_STUBGEN=NO                         \
+          -DCMAKE_INSTALL_PREFIX=${PREFIX}/           \
+          .. \
+ && make install
+
+RUN cd leveldb \
+ && make \
+ && cp -rv include/leveldb ${PREFIX}/include/ \
+ && cp -v out-static/libleveldb.a ${PREFIX}/lib/
+
+WORKDIR /src 
+
+RUN git clone https://github.com/ethereum/solidity.git && \
+    cd solidity && mkdir build && cd build && cmake .. && \
+    make -j 4
 
 ENV INSTALL_BASE /usr/local/bin
 
-# GOLANG
-ENV GOLANG_VERSION 1.6
-ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
-ENV GOLANG_DOWNLOAD_SHA256 5470eac05d273c74ff8bac7bef5bad0b5abbd1c4052efbdbc8db45332e836b0b
-RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
-  && echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - \
-  && tar -C /usr/local -xzf golang.tar.gz \
-  && rm golang.tar.gz
-ENV GOROOT /usr/local/go
-ENV GOPATH /go
-ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
-RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+# Install Dependencies
+RUN apk add ca-certificates curl && \
+    update-ca-certificates && \
+    rm -rf /var/cache/apk/*
 WORKDIR /go
 
 # GO WRAPPER
