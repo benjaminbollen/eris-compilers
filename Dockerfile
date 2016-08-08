@@ -1,54 +1,31 @@
-FROM quay.io/eris/tools
+FROM quay.io/eris/solc
 MAINTAINER Eris Industries <support@erisindustries.com>
 
+# Install Solc dependencies
+#RUN apk update && apk add boost-dev build-base cmake jsoncpp-dev
+
+#WORKDIR /src 
+
+#RUN git clone https://github.com/ethereum/solidity.git --recursive && \
+#    cd solidity && mkdir build && cd build && cmake .. && \
+#    make --jobs=2 solc soltest
+
 # Install Dependencies
-RUN apt-get update && apt-get install -qy \
-  --no-install-recommends \
-  ca-certificates \
-  && rm -rf /var/lib/apt/lists/*
-
-ENV INSTALL_BASE /usr/local/bin
-
-# GOLANG
-ENV GOLANG_VERSION 1.6
-ENV GOLANG_DOWNLOAD_URL https://golang.org/dl/go$GOLANG_VERSION.linux-amd64.tar.gz
-ENV GOLANG_DOWNLOAD_SHA256 5470eac05d273c74ff8bac7bef5bad0b5abbd1c4052efbdbc8db45332e836b0b
-RUN curl -fsSL "$GOLANG_DOWNLOAD_URL" -o golang.tar.gz \
-  && echo "$GOLANG_DOWNLOAD_SHA256  golang.tar.gz" | sha256sum -c - \
-  && tar -C /usr/local -xzf golang.tar.gz \
-  && rm golang.tar.gz
-ENV GOROOT /usr/local/go
-ENV GOPATH /go
-ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
-RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+RUN apk add ca-certificates curl && \
+    update-ca-certificates && \
+    rm -rf /var/cache/apk/*
 WORKDIR /go
 
-# GO WRAPPER
-ENV GO_WRAPPER_VERSION 1.6
-RUN curl -sSL -o $INSTALL_BASE/go-wrapper https://raw.githubusercontent.com/docker-library/golang/master/$GO_WRAPPER_VERSION/wheezy/go-wrapper
-RUN chmod +x $INSTALL_BASE/go-wrapper
-
-# GLIDE INSTALL
-RUN add-apt-repository ppa:masterminds/glide \
-  && apt-get update
-RUN apt-get install glide
-
 # Install eris-compilers, a go app that manages compilations
-ENV REPO github.com/eris-ltd/eris-compilers
-ENV BASE $GOPATH/src/$REPO
-ENV NAME eris-compilers
-RUN mkdir --parents $BASE
-COPY . $BASE/
-RUN cd $BASE && glide install && \
-  cd $BASE/cmd/$NAME && go install ./
-RUN unset GOLANG_VERSION && \
-  unset GOLANG_DOWNLOAD_URL && \
-  unset GOLANG_DOWNLOAD_SHA256 && \
-  unset GO_WRAPPER_VERSION && \
-  unset REPO && \
-  unset BASE && \
-  unset NAME && \
-  unset INSTALL_BASE
+ENV REPO $GOPATH/src/github.com/eris-ltd/eris-compilers
+COPY . $REPO
+
+WORKDIR $REPO
+
+RUN go get github.com/Masterminds/glide
+
+RUN glide install
+RUN cd $REPO/cmd/eris-compilers && go install ./
 
 # Setup User
 ENV USER eris
