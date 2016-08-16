@@ -2,10 +2,11 @@ FROM quay.io/eris/base:alpine
 MAINTAINER Eris Industries <support@erisindustries.com>
 
 # Install Solc dependencies
-RUN apk update && apk add boost-dev cmake jsoncpp-dev build-base
+RUN apk update && apk upgrade && apk add boost-dev build-base cmake jsoncpp-dev
 
+WORKDIR /src 
 
-RUN git clone https://github.com/ethereum/solidity.git && \
+RUN git clone https://github.com/ethereum/solidity.git --recursive && \
     cd solidity && mkdir build && cd build && cmake .. && \
     make -j 2
 
@@ -23,9 +24,7 @@ RUN curl -sSL -o $INSTALL_BASE/go-wrapper https://raw.githubusercontent.com/dock
 RUN chmod +x $INSTALL_BASE/go-wrapper
 
 # GLIDE INSTALL
-RUN add-apt-repository ppa:masterminds/glide \
-  && apt-get update
-RUN apt-get install glide
+RUN go get github.com/Masterminds/glide
 
 # Install eris-compilers, a go app that manages compilations
 ENV REPO github.com/eris-ltd/eris-compilers
