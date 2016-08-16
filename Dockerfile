@@ -2,7 +2,7 @@ FROM quay.io/eris/base:alpine
 MAINTAINER Eris Industries <support@erisindustries.com>
 
 # Install Solc dependencies
-RUN apk update && apk upgrade && apk add boost-dev build-base cmake jsoncpp-dev
+RUN apk update && apk add boost-dev build-base cmake jsoncpp-dev
 
 WORKDIR /src 
 
