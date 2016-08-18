@@ -8,11 +8,7 @@ WORKDIR /src
 
 RUN git clone https://github.com/ethereum/solidity.git --recursive && \
     cd solidity && mkdir build && cd build && cmake .. && \
-    make -j 2
-
-RUN install -s solc/solc /usr/local/bin
-
-ENV INSTALL_BASE /usr/local/bin
+    make -j=2 solc soltest
 
 # Install Dependencies
 RUN apk add ca-certificates curl && \
