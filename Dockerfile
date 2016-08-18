@@ -19,29 +19,29 @@ RUN apk add ca-certificates curl && \
 WORKDIR /go
 
 # GO WRAPPER
-ENV GO_WRAPPER_VERSION 1.6
-RUN curl -sSL -o $INSTALL_BASE/go-wrapper https://raw.githubusercontent.com/docker-library/golang/master/$GO_WRAPPER_VERSION/wheezy/go-wrapper
-RUN chmod +x $INSTALL_BASE/go-wrapper
-
-# GLIDE INSTALL
-RUN go get github.com/Masterminds/glide
+#ENV GO_WRAPPER_VERSION 1.6
+#RUN curl -sSL -o $INSTALL_BASE/go-wrapper https://raw.githubusercontent.com/docker-library/golang/master/$GO_WRAPPER_VERSION/wheezy/go-wrapper
+#RUN chmod +x $INSTALL_BASE/go-wrapper
 
 # Install eris-compilers, a go app that manages compilations
 ENV REPO github.com/eris-ltd/eris-compilers
-ENV BASE $GOPATH/src/$REPO
-ENV NAME eris-compilers
-RUN mkdir --parents $BASE
-COPY . $BASE/
-RUN cd $BASE && glide install && \
-  cd $BASE/cmd/$NAME && go install ./
-RUN unset GOLANG_VERSION && \
-  unset GOLANG_DOWNLOAD_URL && \
-  unset GOLANG_DOWNLOAD_SHA256 && \
-  unset GO_WRAPPER_VERSION && \
-  unset REPO && \
-  unset BASE && \
-  unset NAME && \
-  unset INSTALL_BASE
+#ENV BASE $GOPATH/src/$REPO
+#ENV NAME eris-compilers
+#RUN mkdir --parents $BASE
+COPY . $REPO
+
+RUN go get github.com/Masterminds/glide
+
+RUN glide install && \
+    go install .cmd/eris-compilers \
+#RUN unset GOLANG_VERSION && \
+#  unset GOLANG_DOWNLOAD_URL && \
+#  unset GOLANG_DOWNLOAD_SHA256 && \
+#  unset GO_WRAPPER_VERSION && \
+#  unset REPO && \
+#  unset BASE && \
+#  unset NAME && \
+#  unset INSTALL_BASE
 
 # Setup User
 ENV USER eris
