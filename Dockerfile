@@ -1,4 +1,4 @@
-FROM quay.io/eris/base:alpine
+FROM quay.io/eris/build
 MAINTAINER Eris Industries <support@erisindustries.com>
 
 # Install Solc dependencies
