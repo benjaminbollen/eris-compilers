@@ -24,16 +24,18 @@ WORKDIR /go
 #RUN chmod +x $INSTALL_BASE/go-wrapper
 
 # Install eris-compilers, a go app that manages compilations
-ENV REPO github.com/eris-ltd/eris-compilers
+ENV REPO $GOPATH/src/github.com/eris-ltd/eris-compilers
 #ENV BASE $GOPATH/src/$REPO
 #ENV NAME eris-compilers
 #RUN mkdir --parents $BASE
 COPY . $REPO
 
+WORKDIR $REPO
+
 RUN go get github.com/Masterminds/glide
 
-RUN glide install && \
-    go install .cmd/eris-compilers \
+RUN glide install
+RUN cd $REPO/cmd/eris-compilers && go install ./
 #RUN unset GOLANG_VERSION && \
 #  unset GOLANG_DOWNLOAD_URL && \
 #  unset GOLANG_DOWNLOAD_SHA256 && \
