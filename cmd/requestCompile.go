@@ -8,6 +8,7 @@ import (
 
 	cli "github.com/eris-ltd/eris-compilers/network"
 	"github.com/eris-ltd/eris-compilers/version"
+	util "github.com/eris-ltd/eris-compilers/util"
 	log "github.com/eris-ltd/eris-logger"
 
 	"github.com/spf13/cobra"
@@ -38,7 +39,8 @@ var compileCmd = &cobra.Command{
 			os.Exit(0)
 		}
 		url := createUrl()
-		_, err := cli.BeginCompile(url, args[0], optimizeSolc, libraries)
+		resp, err := cli.BeginCompile(url, args[0], optimizeSolc, libraries)
+		util.PrintResponse(*resp)
 		if err != nil {
 			log.Error(err)
 		}
